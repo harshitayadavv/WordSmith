@@ -4,7 +4,7 @@ uvicorn[standard]==0.24.0
 python-multipart==0.0.6
 python-dotenv==1.0.0
 
-# LangChain ecosystem - Fixed versions for compatibility
+# LangChain ecosystem - Updated for compatibility
 langchain==0.1.17
 langchain-community==0.0.38
 langchain-core==0.1.52
@@ -14,13 +14,13 @@ langserve==0.2.1
 # Groq API
 groq==0.8.0
 
-# Additional utilities - Fixed Pydantic version
-pydantic==2.7.1
-pydantic-settings==2.2.1
+# Additional utilities - Fixed Pydantic version (no Rust compilation)
+pydantic==2.5.3
+pydantic-settings==2.1.0
 httpx==0.25.2
 aiofiles==23.2.1
 
-# Monitoring and logging - Updated version
+# Monitoring and logging
 langsmith==0.1.57
 
 # Optional: For advanced text processing
