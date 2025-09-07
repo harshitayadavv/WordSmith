@@ -1,10 +1,10 @@
 # Core FastAPI dependencies
-fastapi==0.104.1
-uvicorn[standard]==0.24.0
+fastapi==0.100.1
+uvicorn[standard]==0.23.2
 python-multipart==0.0.6
 python-dotenv==1.0.0
 
-# LangChain ecosystem - Updated for compatibility
+# LangChain ecosystem - Compatible versions
 langchain==0.1.17
 langchain-community==0.0.38
 langchain-core==0.1.52
@@ -14,9 +14,8 @@ langserve==0.2.1
 # Groq API
 groq==0.8.0
 
-# Additional utilities - Fixed Pydantic version (no Rust compilation)
-pydantic==2.5.3
-pydantic-settings==2.1.0
+# Additional utilities - Pre-compiled wheels only
+pydantic==1.10.12
 httpx==0.25.2
 aiofiles==23.2.1
 
