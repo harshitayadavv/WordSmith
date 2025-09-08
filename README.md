@@ -45,9 +45,13 @@ Transform any text with these AI-powered tools:
 - **Groq API** - Ultra-fast Llama 3.1 inference
 - **Railway** - Cloud deployment platform
 
-## 📦 Installation
+## 📦 Installation & Demo
 
-### For Users (Recommended)
+### 🌐 Try It Online First!
+**Want to test WordSmith before installing?** Try the live web demo:
+**[🚀 https://word-smith-three.vercel.app/](https://word-smith-three.vercel.app/)**
+
+### For Users (Chrome Extension)
 
 #### Method 1: GitHub Releases
 1. 📥 [Download the latest release](../../releases/latest)
@@ -179,15 +183,18 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [ ] **Team Features** - Share and collaborate on text transformations
 - [ ] **API Rate Limiting** - Smart usage optimization
 
-## Screenshot
+## 📊 Stats
 
-<img width="571" height="802" alt="image" src="https://github.com/user-attachments/assets/7f106b45-a9e8-4518-9354-4538d473b3bc" />
+![GitHub stars](https://img.shields.io/github/stars/yourusername/wordsmith?style=social)
+![GitHub forks](https://img.shields.io/github/forks/yourusername/wordsmith?style=social)
+![GitHub issues](https://img.shields.io/github/issues/yourusername/wordsmith)
+![GitHub last commit](https://img.shields.io/github/last-commit/yourusername/wordsmith)
 
 ---
 
 <div align="center">
 
-**Made with ❤️ by [Harshita]**
+**Made with ❤️ by [Your Name]**
 
 [⭐ Star this repo](../../stargazers) • [🐛 Report Bug](../../issues) • [💡 Request Feature](../../issues)
 
