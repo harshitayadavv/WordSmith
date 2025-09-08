@@ -26,7 +26,8 @@ class Settings(BaseSettings):
         "http://127.0.0.1:3000",
         "chrome-extension://*",
         "https://*.chrome-extension.invalid",
-        "https://word-smith-1vbnprsgu-harshita-yadavs-projects-63189c67.vercel.app",  # Your Vercel URL
+        "https://word-smith-1vbnprsgu-harshita-yadavs-projects-63189c67.vercel.app",  # Domain 1
+        "https://word-smith-git-main-harshita-yadavs-projects-63189c67.vercel.app",  # Domain 2
         "https://*.vercel.app",  # Allow all future Vercel deployments
     ]
     
