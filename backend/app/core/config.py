@@ -23,8 +23,11 @@ class Settings(BaseSettings):
     app_version: str = "1.0.0"
     cors_origins: List[str] = [
         "http://localhost:3000",
+        "http://127.0.0.1:3000",
         "chrome-extension://*",
-        "https://*.chrome-extension.invalid"
+        "https://*.chrome-extension.invalid",
+        "https://word-smith-1vbnprsgu-harshita-yadavs-projects-63189c67.vercel.app",  # Your Vercel URL
+        "https://*.vercel.app",  # Allow all future Vercel deployments
     ]
     
     # Cache Settings
