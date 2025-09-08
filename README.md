@@ -179,12 +179,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [ ] **Team Features** - Share and collaborate on text transformations
 - [ ] **API Rate Limiting** - Smart usage optimization
 
-## 📊 Stats
+## Screenshot
 
-![GitHub stars](https://img.shields.io/github/stars/yourusername/wordsmith?style=social)
-![GitHub forks](https://img.shields.io/github/forks/yourusername/wordsmith?style=social)
-![GitHub issues](https://img.shields.io/github/issues/yourusername/wordsmith)
-![GitHub last commit](https://img.shields.io/github/last-commit/yourusername/wordsmith)
+<img width="571" height="802" alt="image" src="https://github.com/user-attachments/assets/7f106b45-a9e8-4518-9354-4538d473b3bc" />
 
 ---
 
