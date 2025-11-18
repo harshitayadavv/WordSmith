@@ -1,0 +1,20 @@
+fastapi
+uvicorn[standard]
+python-multipart
+python-dotenv
+langchain
+langchain-community
+langchain-core
+langchain-groq
+langserve
+groq
+httpx
+aiofiles
+langsmith
+nltk
+textstat
+# PostgreSQL dependencies
+sqlalchemy
+psycopg2-binary
+alembic
+pydantic[email]

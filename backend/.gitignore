@@ -1,0 +1,17 @@
+# Backend secrets
+backend/.env
+backend/.env.example
+
+# Databases
+backend/wordsmith.db
+
+# Python virtual environment
+venv/
+backend/venv/
+
+# Node modules
+frontend/node_modules/
+frontend/dist/
+
+# Logs
+*.log
