@@ -20,16 +20,24 @@ Transform any text with these AI-powered tools:
 | 😊 **Friendly Tone** | Make text warm, conversational, and approachable | Social media, casual emails |
 | ✂️ **Shorten** | Make text more concise while keeping key points | Twitter, summaries, headlines |
 | 📝 **Expand** | Add more details, context, and explanations | Blog posts, articles, presentations |
-| • **Bullet Points** | Convert paragraphs to clear, organized bullet lists | Meeting notes, action items |
+| 🔘 **Bullet Points** | Convert paragraphs to clear, organized bullet lists | Meeting notes, action items |
 | 😎 **Add Emojis** | Enhance text with contextually appropriate emojis | Social media, informal communication |
 | 🐦 **Tweetify** | Optimize text for Twitter with hashtags and engagement | Social media marketing |
+
+### 📜 History & Saved Transformations
+- **📋 History Tab** - View your last 7 days of transformations
+- **⭐ Saved Tab** - Save favorite transformations permanently
+- **🔄 Quick Reuse** - Easily reapply past transformations
+- **🗑️ Bulk Delete** - Manage your transformation history
 
 ## 🎯 Why WordSmith?
 
 - **🚀 Instant Results** - Transform text in seconds, no waiting
 - **🎨 Multiple Styles** - 8 different transformation options
-- **🔒 Privacy First** - Your text is processed securely and not stored
-- **⚡ Lightning Fast** - Powered by Groq's ultra-fast Llama 3.1 AI
+- **📜 Smart History** - Track and reuse your transformations
+- **⭐ Save Favorites** - Keep important transformations forever
+- **🔒 Privacy First** - Your data is stored locally and securely
+- **⚡ Lightning Fast** - Powered by Claude AI for best results
 - **💡 Smart Context** - AI understands your intent and maintains meaning
 - **🔧 Developer Friendly** - Clean, well-documented codebase
 
@@ -37,23 +45,20 @@ Transform any text with these AI-powered tools:
 
 **Frontend (Chrome Extension)**
 - **React.js** - Modern component-based UI
-- **Tailwind CSS** - Utility-first styling
+- **Vite** - Next-generation frontend tooling
 - **Chrome Manifest V3** - Latest extension architecture
 
 **Backend (API Server)**
 - **FastAPI** - High-performance Python web framework
-- **Groq API** - Ultra-fast Llama 3.1 inference
-- **Railway** - Cloud deployment platform
+- **SQLAlchemy** - SQL database ORM
+- **Anthropic Claude** - Advanced AI for text transformations
+- **SQLite** - Lightweight database for history storage
 
-## 📦 Installation & Demo
-
-### 🌐 Try It Online First!
-**Want to test WordSmith before installing?** Try the live web demo:
-**[🚀 https://word-smith-three.vercel.app/](https://word-smith-three.vercel.app/)**
+## 📦 Installation
 
 ### For Users (Chrome Extension)
 
-#### Method 1: GitHub Releases
+#### Method 1: From GitHub Releases (Recommended)
 1. 📥 [Download the latest release](../../releases/latest)
 2. 📁 Extract the `wordsmith-extension.zip` file
 3. 🌐 Open Chrome and navigate to `chrome://extensions/`
@@ -73,32 +78,52 @@ npm install
 npm run build
 
 # Install in Chrome
-# Go to chrome://extensions/ → Developer Mode → Load Unpacked → Select 'frontend/dist'
+# 1. Go to chrome://extensions/
+# 2. Enable "Developer Mode" (top-right toggle)
+# 3. Click "Load unpacked"
+# 4. Select the 'frontend/dist' folder
 ```
 
-### For Developers
+## 🚀 Development Setup
 
-#### 🖥️ Backend Setup
+### Prerequisites
+- Node.js 16+ and npm
+- Python 3.9+
+- Anthropic API Key ([Get one here](https://console.anthropic.com/))
+
+### 🖥️ Backend Setup
+
 ```bash
 # Navigate to backend directory
-cd wordsmith_backend
+cd backend
 
 # Create virtual environment
 python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+
+# Activate virtual environment
+# Windows:
+venv\Scripts\activate
+# macOS/Linux:
+source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
 
 # Setup environment variables
 cp .env.example .env
-# Add your GROQ_API_KEY to .env file
+# Edit .env and add your ANTHROPIC_API_KEY
+
+# Initialize database
+python -c "from app.core.database import init_db; init_db()"
 
 # Run development server
 python run.py
 ```
 
-#### 🎨 Frontend Setup
+The backend will be available at `http://localhost:8000`
+
+### 🎨 Frontend Setup
+
 ```bash
 # Navigate to frontend directory
 cd frontend
@@ -106,45 +131,81 @@ cd frontend
 # Install dependencies
 npm install
 
-# Start development server
+# Start development server (for web testing)
 npm run dev
 
-# Build for production
+# Build for Chrome extension
 npm run build
 ```
 
+For extension development:
+1. Run `npm run build` to create the `dist` folder
+2. Load the `dist` folder in Chrome as an unpacked extension
+3. Make changes to the code
+4. Run `npm run build` again
+5. Click the refresh icon in `chrome://extensions/` to see changes
+
 ## 🔧 Configuration
 
-### Environment Variables
+### Backend Environment Variables
 
-Create a `.env` file in the `wordsmith_backend` directory:
+Create a `.env` file in the `backend` directory:
 
 ```env
-# Required: Get your API key from https://console.groq.com
-GROQ_API_KEY=your_groq_api_key_here
+# Required: Anthropic API Key
+ANTHROPIC_API_KEY=your_anthropic_api_key_here
 
-# Optional: Custom configuration
+# Optional: Server configuration
 PORT=8000
-DEBUG=true
+HOST=0.0.0.0
+DEBUG=True
+
+# Optional: Database (SQLite by default)
+DATABASE_URL=sqlite:///./wordsmith.db
 ```
 
-### Getting Your Groq API Key
-1. Visit [console.groq.com](https://console.groq.com)
-2. Sign up for a free account
-3. Generate an API key
-4. Add it to your `.env` file
+### Getting Your Anthropic API Key
+1. Visit [console.anthropic.com](https://console.anthropic.com/)
+2. Sign up for an account
+3. Navigate to API Keys
+4. Generate a new API key
+5. Add it to your `.env` file
+
+### Frontend Configuration
+
+Update the API URL in `frontend/src/utils/api.js`:
+
+```javascript
+// For local development
+export const API_BASE_URL = 'http://127.0.0.1:8000';
+
+// For production deployment
+export const API_BASE_URL = 'https://your-backend-url.com';
+```
 
 ## 📚 API Documentation
 
-- **Production API**: `https://wordsmith-production.up.railway.app/docs`
-- **Local Development**: `http://localhost:8000/docs`
+When the backend is running, visit:
+- **Interactive API Docs**: `http://localhost:8000/docs`
+- **Alternative Docs**: `http://localhost:8000/redoc`
 
-Interactive Swagger documentation with all endpoints, request/response examples, and testing capabilities.
+### Main Endpoints
 
-## 🚀 Deployment
+- `POST /api/v1/transform` - Transform text with AI
+- `GET /api/v1/history` - Get transformation history
+- `POST /api/v1/history/save` - Save a transformation
+- `DELETE /api/v1/history` - Delete history items
+- `GET /api/v1/health` - Health check
 
-**Backend**: Automatically deployed to Railway from the `main` branch
-**Frontend**: Distributed as Chrome extension via GitHub Releases
+## 🎮 Usage
+
+1. **Click the WordSmith extension icon** in your Chrome toolbar
+2. **Paste or type your text** in the input area
+3. **Select a transformation type** (Grammar Fix, Formal, etc.)
+4. **Click "Transform"** and watch the magic happen!
+5. **Copy the result** or click **⭐ Save** to keep it forever
+6. **View History** to see your recent transformations
+7. **Check Saved** tab for your favorite transformations
 
 ## 🤝 Contributing
 
@@ -160,13 +221,34 @@ We welcome contributions! Here's how to get started:
 
 ### Development Guidelines
 - Follow existing code style and conventions
-- Add tests for new features
+- Test all features before submitting
 - Update documentation as needed
-- Ensure all checks pass before submitting PR
+- Ensure backend server runs without errors
+- Test extension in Chrome before submitting PR
 
-## 📝 License
+## 📝 Project Structure
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+```
+wordsmith/
+├── frontend/               # Chrome extension & React app
+│   ├── src/
+│   │   ├── components/    # React components
+│   │   ├── utils/         # API utilities
+│   │   └── App.jsx        # Main app component
+│   ├── public/            # Static assets & manifest
+│   └── dist/              # Built extension (after npm run build)
+│
+├── backend/               # FastAPI backend
+│   ├── app/
+│   │   ├── api/          # API routes
+│   │   ├── core/         # Database & config
+│   │   ├── models/       # Database models
+│   │   ├── services/     # Business logic
+│   │   └── main.py       # FastAPI app
+│   └── requirements.txt   # Python dependencies
+│
+└── README.md
+```
 
 ## 🐛 Support & Issues
 
@@ -176,12 +258,19 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🌟 Roadmap
 
+- [x] **History Feature** - Track your transformations ✅
+- [x] **Save Favorites** - Keep important transformations ✅
+- [ ] **Multi-Select Transformations** - Apply multiple transforms at once
+- [ ] **Custom Prompts** - Create your own transformation types
 - [ ] **Firefox Extension** - Expand to Firefox Add-ons
-- [ ] **Custom Prompts** - Allow users to create custom transformations
-- [ ] **Batch Processing** - Process multiple texts at once
-- [ ] **History & Favorites** - Save and revisit transformations
-- [ ] **Team Features** - Share and collaborate on text transformations
-- [ ] **API Rate Limiting** - Smart usage optimization
+- [ ] **Export/Import** - Backup your saved transformations
+- [ ] **Dark Mode** - Eye-friendly dark theme
+- [ ] **Keyboard Shortcuts** - Quick access to features
+- [ ] **Cloud Sync** - Sync history across devices
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 📊 Stats
 
@@ -190,11 +279,18 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ![GitHub issues](https://img.shields.io/github/issues/yourusername/wordsmith)
 ![GitHub last commit](https://img.shields.io/github/last-commit/yourusername/wordsmith)
 
+## 🙏 Acknowledgments
+
+- Anthropic Claude for powerful AI transformations
+- FastAPI for the amazing Python framework
+- React team for the excellent frontend library
+- Chrome Extensions team for the platform
+
 ---
 
 <div align="center">
 
-**Made with ❤️ by Harshita**
+**Made with ❤️ by [Your Name]**
 
 [⭐ Star this repo](../../stargazers) • [🐛 Report Bug](../../issues) • [💡 Request Feature](../../issues)
 
