@@ -11,6 +11,7 @@ WordSmith is a powerful Chrome extension that leverages AI to transform your tex
 
 ## ✨ Features
 
+### 🎯 Text Transformations
 Transform any text with these AI-powered tools:
 
 | Feature | Description | Perfect For |
@@ -24,20 +25,34 @@ Transform any text with these AI-powered tools:
 | 😎 **Add Emojis** | Enhance text with contextually appropriate emojis | Social media, informal communication |
 | 🐦 **Tweetify** | Optimize text for Twitter with hashtags and engagement | Social media marketing |
 
+### 🔥 Multi-Select Transformations (NEW!)
+- **Combine Multiple Transformations** - Apply up to 8 transformations at once!
+- **Smart Conflict Detection** - Prevents incompatible selections (e.g., Formal + Friendly)
+- **Sequential Processing** - Transformations applied in the order you select them
+- **Visual Order Indicator** - See exactly how your text will be transformed
+
+**Compatible Combinations:**
+- ✅ Grammar + Formal + Shorten
+- ✅ Grammar + Bullet + Emoji
+- ✅ Friendly + Expand + Emoji
+- ❌ Formal + Friendly (tone conflict)
+- ❌ Shorten + Expand (length conflict)
+
 ### 📜 History & Saved Transformations
 - **📋 History Tab** - View your last 7 days of transformations
 - **⭐ Saved Tab** - Save favorite transformations permanently
 - **🔄 Quick Reuse** - Easily reapply past transformations
-- **🗑️ Bulk Delete** - Manage your transformation history
+- **🗑️ Bulk Delete** - Manage your transformation history efficiently
 
 ## 🎯 Why WordSmith?
 
 - **🚀 Instant Results** - Transform text in seconds, no waiting
 - **🎨 Multiple Styles** - 8 different transformation options
+- **🔗 Chain Transformations** - Combine multiple transforms for perfect results
 - **📜 Smart History** - Track and reuse your transformations
 - **⭐ Save Favorites** - Keep important transformations forever
 - **🔒 Privacy First** - Your data is stored locally and securely
-- **⚡ Lightning Fast** - Powered by Claude AI for best results
+- **⚡ Lightning Fast** - Powered by Groq's ultra-fast Llama 3.1 AI
 - **💡 Smart Context** - AI understands your intent and maintains meaning
 - **🔧 Developer Friendly** - Clean, well-documented codebase
 
@@ -51,7 +66,7 @@ Transform any text with these AI-powered tools:
 **Backend (API Server)**
 - **FastAPI** - High-performance Python web framework
 - **SQLAlchemy** - SQL database ORM
-- **Anthropic Claude** - Advanced AI for text transformations
+- **Groq API** - Ultra-fast Llama 3.1 AI inference
 - **SQLite** - Lightweight database for history storage
 
 ## 📦 Installation
@@ -89,7 +104,7 @@ npm run build
 ### Prerequisites
 - Node.js 16+ and npm
 - Python 3.9+
-- Anthropic API Key ([Get one here](https://console.anthropic.com/))
+- Groq API Key ([Get one here](https://console.groq.com))
 
 ### 🖥️ Backend Setup
 
@@ -111,7 +126,7 @@ pip install -r requirements.txt
 
 # Setup environment variables
 cp .env.example .env
-# Edit .env and add your ANTHROPIC_API_KEY
+# Edit .env and add your GROQ_API_KEY
 
 # Initialize database
 python -c "from app.core.database import init_db; init_db()"
@@ -152,8 +167,8 @@ For extension development:
 Create a `.env` file in the `backend` directory:
 
 ```env
-# Required: Anthropic API Key
-ANTHROPIC_API_KEY=your_anthropic_api_key_here
+# Required: Groq API Key
+GROQ_API_KEY=your_groq_api_key_here
 
 # Optional: Server configuration
 PORT=8000
@@ -164,12 +179,14 @@ DEBUG=True
 DATABASE_URL=sqlite:///./wordsmith.db
 ```
 
-### Getting Your Anthropic API Key
-1. Visit [console.anthropic.com](https://console.anthropic.com/)
-2. Sign up for an account
-3. Navigate to API Keys
-4. Generate a new API key
-5. Add it to your `.env` file
+### Getting Your Groq API Key
+1. Visit [console.groq.com](https://console.groq.com)
+2. Sign up for a free account
+3. Navigate to API Keys section
+4. Create a new API key
+5. Copy and add it to your `.env` file
+
+**Note:** Groq offers a generous free tier with ultra-fast inference!
 
 ### Frontend Configuration
 
@@ -199,13 +216,35 @@ When the backend is running, visit:
 
 ## 🎮 Usage
 
+### Basic Transformation
 1. **Click the WordSmith extension icon** in your Chrome toolbar
 2. **Paste or type your text** in the input area
 3. **Select a transformation type** (Grammar Fix, Formal, etc.)
 4. **Click "Transform"** and watch the magic happen!
 5. **Copy the result** or click **⭐ Save** to keep it forever
-6. **View History** to see your recent transformations
-7. **Check Saved** tab for your favorite transformations
+
+### Multi-Select Transformation (Advanced)
+1. **Select multiple transformation buttons** - Click multiple options (e.g., Grammar + Formal + Shorten)
+2. **See the order** - Transformations will be applied sequentially in the order selected
+3. **Smart conflicts** - Incompatible options will be automatically disabled
+4. **Clear all** - Click "Clear All" to reset your selections
+5. **Transform** - Click transform to apply all selected transformations in sequence
+
+**Example Multi-Transform Flow:**
+```
+Original: "i has big mistake in email"
+  ↓ Grammar Fix
+"I have a big mistake in the email"
+  ↓ Formal Tone  
+"I have made a significant error in the email correspondence"
+  ↓ Shorten
+"I made an error in the email"
+```
+
+### History & Saved
+6. **View History** to see your recent transformations (last 7 days)
+7. **Check Saved** tab for your favorite transformations (permanent)
+8. **Reuse** past transformations with one click
 
 ## 🤝 Contributing
 
@@ -233,6 +272,10 @@ wordsmith/
 ├── frontend/               # Chrome extension & React app
 │   ├── src/
 │   │   ├── components/    # React components
+│   │   │   ├── TransformButtons.jsx  # Multi-select UI
+│   │   │   ├── History.jsx
+│   │   │   ├── SavedChats.jsx
+│   │   │   └── ...
 │   │   ├── utils/         # API utilities
 │   │   └── App.jsx        # Main app component
 │   ├── public/            # Static assets & manifest
@@ -260,13 +303,14 @@ wordsmith/
 
 - [x] **History Feature** - Track your transformations ✅
 - [x] **Save Favorites** - Keep important transformations ✅
-- [ ] **Multi-Select Transformations** - Apply multiple transforms at once
+- [x] **Multi-Select Transformations** - Apply multiple transforms at once ✅
 - [ ] **Custom Prompts** - Create your own transformation types
 - [ ] **Firefox Extension** - Expand to Firefox Add-ons
 - [ ] **Export/Import** - Backup your saved transformations
 - [ ] **Dark Mode** - Eye-friendly dark theme
 - [ ] **Keyboard Shortcuts** - Quick access to features
 - [ ] **Cloud Sync** - Sync history across devices
+- [ ] **Browser Context Menu** - Right-click to transform selected text
 
 ## 📝 License
 
@@ -281,7 +325,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- Anthropic Claude for powerful AI transformations
+- Groq for ultra-fast AI inference
 - FastAPI for the amazing Python framework
 - React team for the excellent frontend library
 - Chrome Extensions team for the platform
@@ -290,7 +334,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <div align="center">
 
-**Made with ❤️ by [Harshita]**
+**Made with ❤️ by Harshita**
 
 [⭐ Star this repo](../../stargazers) • [🐛 Report Bug](../../issues) • [💡 Request Feature](../../issues)
 

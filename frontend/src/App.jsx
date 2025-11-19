@@ -13,12 +13,12 @@ import { transformText, testConnection } from './utils/api'
 function App() {
   const [inputText, setInputText] = useState('')
   const [outputText, setOutputText] = useState('')
-  const [selectedTransform, setSelectedTransform] = useState('')
+  const [selectedTransforms, setSelectedTransforms] = useState([]) // CHANGED: Array instead of string
   const [isLoading, setIsLoading] = useState(false)
   const [showResult, setShowResult] = useState(false)
   const [backendStatus, setBackendStatus] = useState('checking')
   const [activeTab, setActiveTab] = useState('chat')
-  const [currentHistoryId, setCurrentHistoryId] = useState(null) // NEW: Store history ID
+  const [currentHistoryId, setCurrentHistoryId] = useState(null)
 
   // Check backend connection on component mount
   useEffect(() => {
@@ -44,7 +44,7 @@ function App() {
   }, [backendStatus])
 
   const handleTransform = async () => {
-    if (!inputText.trim() || !selectedTransform) {
+    if (!inputText.trim() || selectedTransforms.length === 0) {
       return
     }
 
@@ -52,15 +52,27 @@ function App() {
     setShowResult(false)
 
     try {
-      const result = await transformText(inputText, selectedTransform)
+      // Apply transformations sequentially
+      let currentText = inputText
+      let lastHistoryId = null
       
-      if (result.success) {
-        setOutputText(result.transformedText)
-        setCurrentHistoryId(result.historyId) // NEW: Store the history ID
-        setShowResult(true)
-      } else {
-        throw new Error(result.message || 'Transformation failed')
+      for (let i = 0; i < selectedTransforms.length; i++) {
+        const transformType = selectedTransforms[i]
+        
+        const result = await transformText(currentText, transformType)
+        
+        if (result.success) {
+          currentText = result.transformedText
+          lastHistoryId = result.historyId
+        } else {
+          throw new Error(result.message || `Transformation ${i + 1} failed`)
+        }
       }
+      
+      setOutputText(currentText)
+      setCurrentHistoryId(lastHistoryId)
+      setShowResult(true)
+      
     } catch (error) {
       console.error('Transform error:', error)
       setOutputText(`Error: ${error.message || 'Sorry, there was an error processing your text. Please try again.'}`)
@@ -73,15 +85,16 @@ function App() {
   const handleReset = () => {
     setInputText('')
     setOutputText('')
-    setSelectedTransform('')
+    setSelectedTransforms([])
     setShowResult(false)
-    setCurrentHistoryId(null) // NEW: Reset history ID
+    setCurrentHistoryId(null)
   }
 
   const handleUseHistory = (historyItem) => {
     setInputText(historyItem.original_text)
     setOutputText(historyItem.transformed_text)
-    setCurrentHistoryId(historyItem.id) // NEW: Set history ID when using from history
+    setCurrentHistoryId(historyItem.id)
+    
     // Map backend transformation type to frontend format
     const typeMap = {
       'grammar_fix': 'grammar',
@@ -93,7 +106,9 @@ function App() {
       'emoji': 'emoji',
       'tweetify': 'tweetify'
     }
-    setSelectedTransform(typeMap[historyItem.transformation_type] || historyItem.transformation_type)
+    
+    const mappedType = typeMap[historyItem.transformation_type] || historyItem.transformation_type
+    setSelectedTransforms([mappedType]) // Set as array with single item
     setShowResult(true)
     setActiveTab('chat')
   }
@@ -101,7 +116,6 @@ function App() {
   const handleTabChange = (tab) => {
     setActiveTab(tab)
     if (tab === 'chat') {
-      // Reset to chat view
       setShowResult(false)
     }
   }
@@ -142,13 +156,13 @@ function App() {
                     />
                     
                     <TransformButtons 
-                      selectedTransform={selectedTransform}
-                      onTransformSelect={setSelectedTransform}
+                      selectedTransforms={selectedTransforms}
+                      onTransformSelect={setSelectedTransforms}
                     />
                     
                     <ConvertButton 
                       onClick={handleTransform}
-                      disabled={!inputText.trim() || !selectedTransform || isLoading || backendStatus !== 'connected'}
+                      disabled={!inputText.trim() || selectedTransforms.length === 0 || isLoading || backendStatus !== 'connected'}
                       isLoading={isLoading}
                     />
                   </>
@@ -156,8 +170,8 @@ function App() {
                   <ResultDisplay 
                     text={outputText}
                     onReset={handleReset}
-                    transformType={selectedTransform}
-                    historyId={currentHistoryId} // NEW: Pass history ID
+                    transformType={selectedTransforms[selectedTransforms.length - 1]} // Show last transform
+                    historyId={currentHistoryId}
                   />
                 )}
               </>
