@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && npm run copy-files",
+    "build": "vite build",
+    "build:extension": "vite build && npm run copy-files",
     "copy-files": "copy-files.bat",
     "preview": "vite preview"
   },
