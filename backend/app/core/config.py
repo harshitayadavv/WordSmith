@@ -39,14 +39,16 @@ class Settings(BaseSettings):
     cors_origins: List[str] = [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
-        "http://localhost:5173",  # Vite dev server
-        "http://127.0.0.1:5173",  # Vite dev server
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
         "chrome-extension://*",
         "https://*.chrome-extension.invalid",
         "https://word-smith-three.vercel.app",
+        "https://word-smith-sand.vercel.app",
         "https://word-smith-1vbnprsgu-harshita-yadavs-projects-63189c67.vercel.app",
         "https://word-smith-git-main-harshita-yadavs-projects-63189c67.vercel.app",
         "https://*.vercel.app",
+        "*",
     ]
     
     # Cache Settings
@@ -59,8 +61,8 @@ class Settings(BaseSettings):
     max_tokens: int = 1000
     
     # History Settings
-    history_retention_days: int = 7  # Keep history for 7 days
-    max_history_per_user: int = 100  # Maximum history items per user
+    history_retention_days: int = 7
+    max_history_per_user: int = 100
     
     # LangChain (optional)
     langchain_tracing_v2: bool = False
