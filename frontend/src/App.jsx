@@ -13,14 +13,13 @@ import { transformText, testConnection } from './utils/api'
 function App() {
   const [inputText, setInputText] = useState('')
   const [outputText, setOutputText] = useState('')
-  const [selectedTransforms, setSelectedTransforms] = useState([]) // CHANGED: Array instead of string
+  const [selectedTransforms, setSelectedTransforms] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [showResult, setShowResult] = useState(false)
   const [backendStatus, setBackendStatus] = useState('checking')
   const [activeTab, setActiveTab] = useState('chat')
   const [currentHistoryId, setCurrentHistoryId] = useState(null)
 
-  // Check backend connection on component mount
   useEffect(() => {
     const checkBackend = async () => {
       try {
@@ -33,7 +32,6 @@ function App() {
     }
     
     checkBackend()
-    // Recheck every 10 seconds if disconnected
     const interval = setInterval(() => {
       if (backendStatus !== 'connected') {
         checkBackend()
@@ -52,14 +50,17 @@ function App() {
     setShowResult(false)
 
     try {
-      // Apply transformations sequentially
+      // Save the TRUE original text before any transformations
+      const trueOriginalText = inputText
+      
       let currentText = inputText
       let lastHistoryId = null
       
       for (let i = 0; i < selectedTransforms.length; i++) {
         const transformType = selectedTransforms[i]
         
-        const result = await transformText(currentText, transformType)
+        // Pass the true original text to all transformations
+        const result = await transformText(currentText, transformType, trueOriginalText)
         
         if (result.success) {
           currentText = result.transformedText
@@ -95,7 +96,6 @@ function App() {
     setOutputText(historyItem.transformed_text)
     setCurrentHistoryId(historyItem.id)
     
-    // Map backend transformation type to frontend format
     const typeMap = {
       'grammar_fix': 'grammar',
       'formal': 'formal',
@@ -108,7 +108,7 @@ function App() {
     }
     
     const mappedType = typeMap[historyItem.transformation_type] || historyItem.transformation_type
-    setSelectedTransforms([mappedType]) // Set as array with single item
+    setSelectedTransforms([mappedType])
     setShowResult(true)
     setActiveTab('chat')
   }
@@ -125,7 +125,6 @@ function App() {
       <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
         <Header />
         
-        {/* Backend status indicator */}
         {backendStatus !== 'connected' && (
           <div className="backend-status" style={{
             padding: '8px 16px',
@@ -139,12 +138,10 @@ function App() {
           </div>
         )}
         
-        {/* Navigation Tabs */}
         <Navigation activeTab={activeTab} onTabChange={handleTabChange} />
         
         <div className="main-content">
           <div className="content-space">
-            {/* Chat Tab */}
             {activeTab === 'chat' && (
               <>
                 {!showResult ? (
@@ -170,14 +167,13 @@ function App() {
                   <ResultDisplay 
                     text={outputText}
                     onReset={handleReset}
-                    transformType={selectedTransforms[selectedTransforms.length - 1]} // Show last transform
+                    transformType={selectedTransforms[selectedTransforms.length - 1]}
                     historyId={currentHistoryId}
                   />
                 )}
               </>
             )}
             
-            {/* History Tab */}
             {activeTab === 'history' && (
               <div className="tab-content">
                 <History
@@ -188,7 +184,6 @@ function App() {
               </div>
             )}
             
-            {/* Saved Tab */}
             {activeTab === 'saved' && (
               <div className="tab-content">
                 <SavedChats onUseHistory={handleUseHistory} />

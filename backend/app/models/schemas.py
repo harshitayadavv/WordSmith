@@ -18,6 +18,7 @@ class TextTransformRequest(BaseModel):
     transformation_type: TransformationType = Field(..., description="Type of transformation to apply")
     additional_instructions: Optional[str] = Field(None, max_length=500, description="Additional custom instructions")
     user_id: Optional[str] = Field(default="anonymous", description="User ID for history tracking")
+    original_text: Optional[str] = Field(None, max_length=5000, description="Original text for multi-transform chains")
     
     class Config:
         json_schema_extra = {
@@ -25,7 +26,8 @@ class TextTransformRequest(BaseModel):
                 "text": "hey there how r u doing today",
                 "transformation_type": "grammar_fix",
                 "additional_instructions": "Make it more professional",
-                "user_id": "user_123"
+                "user_id": "user_123",
+                "original_text": None
             }
         }
 
@@ -36,7 +38,7 @@ class TextTransformResponse(BaseModel):
     processing_time: float = Field(..., description="Processing time in seconds")
     word_count_original: int
     word_count_transformed: int
-    history_id: Optional[str] = None  # ID of saved history record
+    history_id: Optional[str] = None
     
     class Config:
         json_schema_extra = {
@@ -78,7 +80,6 @@ class ErrorResponse(BaseModel):
     status_code: int
     timestamp: str
 
-# History-related schemas
 class HistoryItem(BaseModel):
     id: str
     user_id: str

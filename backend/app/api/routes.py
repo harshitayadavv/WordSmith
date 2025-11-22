@@ -39,10 +39,7 @@ router = APIRouter()
 async def health_check():
     """Health check endpoint."""
     try:
-        # Check Groq API status
         groq_status = await text_processor.health_check()
-        
-        # Check database connection
         db_status = "healthy" if check_db_connection() else "unhealthy"
         
         return HealthResponse(
@@ -69,20 +66,17 @@ async def health_check():
 @router.post("/transform", response_model=TextTransformResponse)
 async def transform_text(request: TextTransformRequest, db: Session = Depends(get_db)):
     """Transform text using the specified transformation type."""
-    history_id = None  # Initialize history_id
+    history_id = None
     
     try:
         logger.info(f"Transform request from user: {request.user_id}")
         
-        # Validate input
         is_valid, error_msg = validate_text_input(request.text)
         if not is_valid:
             raise HTTPException(status_code=400, detail=error_msg)
         
-        # Sanitize text
         cleaned_text = sanitize_text(request.text)
         
-        # Check cache first
         cached_result = cache.get(
             cleaned_text,
             request.transformation_type.value,
@@ -100,14 +94,12 @@ async def transform_text(request: TextTransformRequest, db: Session = Depends(ge
                 "word_count_transformed": len(cached_result.split())
             }
         else:
-            # Process the text
             result = await text_processor.transform_text(
                 cleaned_text,
                 request.transformation_type,
                 request.additional_instructions
             )
             
-            # Cache the result
             cache.set(
                 cleaned_text,
                 request.transformation_type.value,
@@ -124,18 +116,22 @@ async def transform_text(request: TextTransformRequest, db: Session = Depends(ge
                 "word_count_transformed": result['word_count_transformed']
             }
         
-        # Save to history (for both cached and non-cached results)
+        # Save to history
         try:
             logger.info(f"Attempting to save history for user: {request.user_id}")
             
+            # Use the true original text if provided (for multi-transform chains)
+            # Otherwise use the input text
+            true_original_text = request.original_text if request.original_text else request.text
+            
             history_record = TransformationHistory(
                 user_id=request.user_id or "anonymous",
-                original_text=request.text,
+                original_text=true_original_text,
                 transformed_text=response_data['transformed_text'],
                 transformation_type=request.transformation_type.value,
                 additional_instructions=request.additional_instructions,
                 processing_time=response_data['processing_time'],
-                word_count_original=response_data['word_count_original'],
+                word_count_original=len(true_original_text.split()),
                 word_count_transformed=response_data['word_count_transformed'],
                 is_saved=False
             )
@@ -152,9 +148,7 @@ async def transform_text(request: TextTransformRequest, db: Session = Depends(ge
             logger.error(f"Exception type: {type(e).__name__}")
             logger.error(f"Exception details: {repr(e)}")
             db.rollback()
-            # Continue without history - don't fail the whole request
         
-        # Add history_id to response
         response_data['history_id'] = history_id
         
         return TextTransformResponse(**response_data)
@@ -173,7 +167,6 @@ async def transform_text(request: TextTransformRequest, db: Session = Depends(ge
 async def batch_transform_text(request: BatchTransformRequest, db: Session = Depends(get_db)):
     """Transform multiple texts at once."""
     try:
-        # Validate each text
         for i, text in enumerate(request.texts):
             is_valid, error_msg = validate_text_input(text)
             if not is_valid:
@@ -182,17 +175,14 @@ async def batch_transform_text(request: BatchTransformRequest, db: Session = Dep
                     detail=f"Text at index {i}: {error_msg}"
                 )
         
-        # Sanitize texts
         cleaned_texts = [sanitize_text(text) for text in request.texts]
         
-        # Process all texts
         result = await text_processor.batch_transform(
             cleaned_texts,
             request.transformation_type,
             request.additional_instructions
         )
         
-        # Save batch to history
         try:
             for i, res in enumerate(result['results']):
                 history_record = TransformationHistory(
@@ -226,8 +216,6 @@ async def batch_transform_text(request: BatchTransformRequest, db: Session = Dep
             detail=error_response["message"]
         )
 
-# ============= HISTORY ENDPOINTS =============
-
 @router.get("/history", response_model=HistoryResponse)
 async def get_history(
     user_id: str = Query("anonymous", description="User ID"),
@@ -241,33 +229,27 @@ async def get_history(
     try:
         logger.info(f"Fetching history for user: {user_id}")
         
-        # Calculate date 7 days ago
         seven_days_ago = datetime.now() - timedelta(days=settings.history_retention_days)
         
-        # Build query
         query = db.query(TransformationHistory).filter(
             TransformationHistory.user_id == user_id,
             TransformationHistory.created_at >= seven_days_ago
         )
         
-        # Apply filters
         if transformation_type:
             query = query.filter(TransformationHistory.transformation_type == transformation_type)
         
         if saved_only:
             query = query.filter(TransformationHistory.is_saved == True)
         
-        # Get total count
         total_count = query.count()
         logger.info(f"Found {total_count} history items")
         
-        # Apply pagination and ordering
         items = query.order_by(desc(TransformationHistory.created_at))\
             .offset((page - 1) * page_size)\
             .limit(page_size)\
             .all()
         
-        # Convert to dict
         history_items = [HistoryItem(**item.to_dict()) for item in items]
         
         return HistoryResponse(
@@ -356,8 +338,6 @@ async def cleanup_old_history(db: Session = Depends(get_db)):
         logger.error(f"Error cleaning up history: {str(e)}")
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Failed to cleanup: {str(e)}")
-
-# ============= ORIGINAL ENDPOINTS =============
 
 @router.get("/transformations")
 async def get_available_transformations():
