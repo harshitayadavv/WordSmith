@@ -9,6 +9,16 @@
 
 WordSmith is a powerful Chrome extension that leverages AI to transform your text in seconds. Whether you're writing emails, social media posts, or documents, WordSmith helps you communicate better with intelligent text transformations.
 
+## 🌐 Live Demo
+
+**Try WordSmith now!**
+
+| Platform | Link |
+|----------|------|
+| 🌐 **Web App** | [https://word-smith-sand.vercel.app](https://word-smith-sand.vercel.app) |
+| 🔌 **Backend API** | [https://wordsmith-backend-iatg.onrender.com](https://wordsmith-backend-iatg.onrender.com) |
+| 📚 **API Docs** | [https://wordsmith-backend-iatg.onrender.com/docs](https://wordsmith-backend-iatg.onrender.com/docs) |
+
 ## ✨ Features
 
 ### 🎯 Text Transformations
@@ -25,7 +35,7 @@ Transform any text with these AI-powered tools:
 | 😎 **Add Emojis** | Enhance text with contextually appropriate emojis | Social media, informal communication |
 | 🐦 **Tweetify** | Optimize text for Twitter with hashtags and engagement | Social media marketing |
 
-### 🔥 Multi-Select Transformations (NEW!)
+### 🔥 Multi-Select Transformations
 - **Combine Multiple Transformations** - Apply up to 8 transformations at once!
 - **Smart Conflict Detection** - Prevents incompatible selections (e.g., Formal + Friendly)
 - **Sequential Processing** - Transformations applied in the order you select them
@@ -69,12 +79,16 @@ Transform any text with these AI-powered tools:
 - **Groq API** - Ultra-fast Llama 3.1 AI inference
 - **SQLite** - Lightweight database for history storage
 
+**Deployment**
+- **Frontend** - Vercel
+- **Backend** - Render
+
 ## 📦 Installation
 
 ### For Users (Chrome Extension)
 
 #### Method 1: From GitHub Releases (Recommended)
-1. 📥 [Download the latest release](../../releases/latest)
+1. 📥 [Download the latest release](https://github.com/harshitayadavv/WordSmith/releases/latest)
 2. 📁 Extract the `wordsmith-extension.zip` file
 3. 🌐 Open Chrome and navigate to `chrome://extensions/`
 4. 🔧 Enable **"Developer mode"** (toggle in top-right)
@@ -84,13 +98,13 @@ Transform any text with these AI-powered tools:
 #### Method 2: Build from Source
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/wordsmith.git
-cd wordsmith
+git clone https://github.com/harshitayadavv/WordSmith.git
+cd WordSmith
 
 # Build the extension
 cd frontend
 npm install
-npm run build
+npm run build:extension
 
 # Install in Chrome
 # 1. Go to chrome://extensions/
@@ -150,15 +164,11 @@ npm install
 npm run dev
 
 # Build for Chrome extension
+npm run build:extension
+
+# Build for web deployment
 npm run build
 ```
-
-For extension development:
-1. Run `npm run build` to create the `dist` folder
-2. Load the `dist` folder in Chrome as an unpacked extension
-3. Make changes to the code
-4. Run `npm run build` again
-5. Click the refresh icon in `chrome://extensions/` to see changes
 
 ## 🔧 Configuration
 
@@ -196,23 +206,25 @@ Update the API URL in `frontend/src/utils/api.js`:
 // For local development
 export const API_BASE_URL = 'http://127.0.0.1:8000';
 
-// For production deployment
-export const API_BASE_URL = 'https://your-backend-url.com';
+// For production (already configured)
+export const API_BASE_URL = 'https://wordsmith-backend-iatg.onrender.com';
 ```
 
 ## 📚 API Documentation
 
-When the backend is running, visit:
-- **Interactive API Docs**: `http://localhost:8000/docs`
-- **Alternative Docs**: `http://localhost:8000/redoc`
+- **Production API Docs**: [https://wordsmith-backend-iatg.onrender.com/docs](https://wordsmith-backend-iatg.onrender.com/docs)
+- **Local Development**: `http://localhost:8000/docs`
 
 ### Main Endpoints
 
-- `POST /api/v1/transform` - Transform text with AI
-- `GET /api/v1/history` - Get transformation history
-- `POST /api/v1/history/save` - Save a transformation
-- `DELETE /api/v1/history` - Delete history items
-- `GET /api/v1/health` - Health check
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/v1/transform` | Transform text with AI |
+| `GET` | `/api/v1/history` | Get transformation history |
+| `POST` | `/api/v1/history/save` | Save a transformation |
+| `DELETE` | `/api/v1/history` | Delete history items |
+| `GET` | `/api/v1/health` | Health check |
+| `GET` | `/api/v1/transformations` | List available transformations |
 
 ## 🎮 Usage
 
@@ -268,7 +280,7 @@ We welcome contributions! Here's how to get started:
 ## 📝 Project Structure
 
 ```
-wordsmith/
+WordSmith/
 ├── frontend/               # Chrome extension & React app
 │   ├── src/
 │   │   ├── components/    # React components
@@ -295,15 +307,17 @@ wordsmith/
 
 ## 🐛 Support & Issues
 
-- 🐞 **Bug Reports**: [Open an issue](../../issues/new?template=bug_report.md)
-- 💡 **Feature Requests**: [Request a feature](../../issues/new?template=feature_request.md)
-- 💬 **Questions**: [Start a discussion](../../discussions)
+- 🐞 **Bug Reports**: [Open an issue](https://github.com/harshitayadavv/WordSmith/issues/new)
+- 💡 **Feature Requests**: [Request a feature](https://github.com/harshitayadavv/WordSmith/issues/new)
+- 💬 **Questions**: [Start a discussion](https://github.com/harshitayadavv/WordSmith/discussions)
 
 ## 🌟 Roadmap
 
 - [x] **History Feature** - Track your transformations ✅
 - [x] **Save Favorites** - Keep important transformations ✅
 - [x] **Multi-Select Transformations** - Apply multiple transforms at once ✅
+- [x] **Web App Deployment** - Live on Vercel ✅
+- [x] **Backend Deployment** - Live on Render ✅
 - [ ] **Custom Prompts** - Create your own transformation types
 - [ ] **Firefox Extension** - Expand to Firefox Add-ons
 - [ ] **Export/Import** - Backup your saved transformations
@@ -318,10 +332,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📊 Stats
 
-![GitHub stars](https://img.shields.io/github/stars/yourusername/wordsmith?style=social)
-![GitHub forks](https://img.shields.io/github/forks/yourusername/wordsmith?style=social)
-![GitHub issues](https://img.shields.io/github/issues/yourusername/wordsmith)
-![GitHub last commit](https://img.shields.io/github/last-commit/yourusername/wordsmith)
+![GitHub stars](https://img.shields.io/github/stars/harshitayadavv/WordSmith?style=social)
+![GitHub forks](https://img.shields.io/github/forks/harshitayadavv/WordSmith?style=social)
+![GitHub issues](https://img.shields.io/github/issues/harshitayadavv/WordSmith)
+![GitHub last commit](https://img.shields.io/github/last-commit/harshitayadavv/WordSmith)
 
 ## 🙏 Acknowledgments
 
@@ -329,13 +343,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - FastAPI for the amazing Python framework
 - React team for the excellent frontend library
 - Chrome Extensions team for the platform
+- Vercel & Render for hosting
 
 ---
 
 <div align="center">
 
-**Made with ❤️ by Harshita**
+**Made with ❤️ by [Harshita](https://github.com/harshitayadavv)**
 
-[⭐ Star this repo](../../stargazers) • [🐛 Report Bug](../../issues) • [💡 Request Feature](../../issues)
+[🌐 Try Live Demo](https://word-smith-sand.vercel.app) • [⭐ Star this repo](https://github.com/harshitayadavv/WordSmith/stargazers) • [🐛 Report Bug](https://github.com/harshitayadavv/WordSmith/issues) • [💡 Request Feature](https://github.com/harshitayadavv/WordSmith/issues)
 
 </div>
